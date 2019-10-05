@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class LevelGenerator : MonoBehaviour {
 
@@ -7,13 +9,17 @@ public class LevelGenerator : MonoBehaviour {
 	public ColorToPrefab[] colorMappings;
 
 	public GameObject WallPrefab;
+	public GameObject GroundPrefab;
 
 	public int[,] mapArr;
+
+	public List<GameObject> interactables  = new List<GameObject>();
 
 	// Use this for initialization
 	void Start () {
 		mapArr = new int[map.width,map.height];
 		GenerateLevel();
+
 	}
 
 	void PrintMapArr(){
@@ -54,14 +60,21 @@ public class LevelGenerator : MonoBehaviour {
 		{
 			for (int j = 0; j < colLength; j++)
 			{
-				if (mapArr[i, (j)] == 1){
+				if (mapArr[i, (j)] >= 1){
 					// add wall to the top if no other tile above
 					if (j != (colLength - 1) && mapArr[i, (j+1)] == 0){
 						Vector2 position = new Vector2(i, (j+1));
 						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 90)), transform);
+					} if (j == (colLength - 1)){
+						Vector2 position = new Vector2(i, (j+1));
+						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 90)), transform);
 					}
+
 					// add wall to the right if no other tile to the right
 					if (i != (rowLength - 1) && mapArr[(i+1), j] == 0){
+						Vector2 position = new Vector2((i+1), j);
+						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 0)), transform);
+					} else if (i == (rowLength - 1)) {
 						Vector2 position = new Vector2((i+1), j);
 						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 0)), transform);
 					}
@@ -95,20 +108,35 @@ public class LevelGenerator : MonoBehaviour {
 
 		if (pixelColor.a == 0)
 		{
-			// The pixel is transparrent. Let's ignore it!
+			// The pixel is transparent. Let's ignore it!
 			mapArr[x,y] = 0;
 			return;
 		}
 
+		int interactCount = 0;
 		foreach (ColorToPrefab colorMapping in colorMappings)
 		{
 			if (colorMapping.color.Equals(pixelColor))
 			{
-				if(colorMapping.prefabID.Equals("Ground")){
-					mapArr[x,y] = 1;
-				}
 				Vector2 position = new Vector2(x, y);
-				Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
+				mapArr[x,y] = 1;
+
+				if(colorMapping.prefabID.Equals("Ground")){
+
+				} else if (colorMapping.prefabID.Equals("Enemy")){
+					mapArr[x,y] = 3;
+					Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
+					// interactables.Add( newInteractable );
+				} else if (colorMapping.prefabID.Equals("Goal")){
+					mapArr[x,y] = 2;
+				} else if (colorMapping.prefabID.Equals("Block")){
+					mapArr[x,y] = 5 + interactCount;
+					GameObject newInteractable = Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
+					interactables.Add( newInteractable );
+					interactCount += 1;
+				}
+
+				Instantiate(GroundPrefab, position, Quaternion.identity, transform);
 			}
 		}
 	}

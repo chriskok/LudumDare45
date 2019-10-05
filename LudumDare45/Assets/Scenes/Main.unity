@@ -149,12 +149,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0d0b6bc5c92584dab73f8994e818a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 2800000, guid: e4e7aa0e6188c014f96ca89a6ddccd80, type: 3}
+  map: {fileID: 2800000, guid: 41b8cf874f1540c4382a11c97ab27ff4, type: 3}
   colorMappings:
   - color: {r: 1, g: 0, b: 0, a: 1}
+    prefab: {fileID: 8130291628478942779, guid: be2e20ce6db084d4b87a4860370719f3,
+      type: 3}
+    prefabID: Enemy
+  - color: {r: 0, g: 0.5019608, b: 0, a: 1}
     prefab: {fileID: 395860053897691199, guid: 50759301fdc31c74b9ecf82b1d4131ec, type: 3}
     prefabID: Ground
+  - color: {r: 1, g: 0.9607843, b: 0, a: 1}
+    prefab: {fileID: 395860053897691199, guid: c178608bdd5bd59428b7e8211937a822, type: 3}
+    prefabID: Goal
+  - color: {r: 0.5019608, g: 0, b: 0, a: 1}
+    prefab: {fileID: 8130291628478942779, guid: 6421500257ab78e46b763c38759cc5fa,
+      type: 3}
+    prefabID: Block
   WallPrefab: {fileID: 8917140063179193439, guid: 352e2153ab1a5914e83a16f34a985cce,
+    type: 3}
+  GroundPrefab: {fileID: 395860053897691199, guid: 50759301fdc31c74b9ecf82b1d4131ec,
     type: 3}
 --- !u!4 &384666885
 Transform:
