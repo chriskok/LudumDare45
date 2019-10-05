@@ -13,7 +13,8 @@ public class PlayerScript : MonoBehaviour
 	// Networking variables
 	Thread receiveThread; 
 	UdpClient client; 
-	bool eyeschanged;
+	bool fadeout;
+    bool eyesopen;
 	int port; 
 
     public float speed = 2.0f;
@@ -22,6 +23,7 @@ public class PlayerScript : MonoBehaviour
 
     public LevelGenerator lg;
     public CameraShake camshake;
+    public GameObject fadechange;
 
     // Start is called before the first frame update
     void Start()
@@ -30,8 +32,11 @@ public class PlayerScript : MonoBehaviour
         tr = transform;
 
 		port = 5065; 
-		eyeschanged = false; 
+		fadeout = false; 
+        eyesopen = true;
 		InitUDP();
+
+
     }
 
 	private void InitUDP()
@@ -58,11 +63,14 @@ public class PlayerScript : MonoBehaviour
 				print (">> " + text);
 
                 if (text.Equals("OPEN")){
-                    print("EYES WIDE OPEN YO");
+                    // ScreenFade(false);
+				    eyesopen = true;
                 } else{
-                    print("you shouldnt be seeing this");
+				    eyesopen = false;             
                 }
-				eyeschanged = true;
+
+                fadeout = true;
+                
 
 			} catch(Exception e)
 			{
@@ -73,6 +81,14 @@ public class PlayerScript : MonoBehaviour
 
     void ShakeCamera(float duration){
         camshake.shakeDuration = duration;
+    }
+
+    void ScreenFade(bool eyesopen){
+        if (eyesopen){
+            fadechange.GetComponent<Animator>().SetBool("Darkness", false); 
+        } else{
+            fadechange.GetComponent<Animator>().SetBool("Darkness", true); 
+        }
     }
 
     // Directions up down left right are represented by (1,2,3,4) respectively
@@ -147,14 +163,36 @@ public class PlayerScript : MonoBehaviour
         if (collision_val >= 1){
             // hit a block
             if (collision_val >= 5){
-                int blockmoved = MoveBlock(lg.interactables[collision_val - 5], pos, direction);
-                if (blockmoved == 1){
-                    return pos;
-                } else {
+                if (eyesopen && lg.mapObjArr[x_val, y_val].activeSelf == false){
+                    Debug.Log("Can't move explore with your eyes open!");
                     return tr.position;
+                } else {
+                    int blockmoved = MoveBlock(lg.interactables[collision_val - 5], pos, direction);
+                    // lg.PrintMapArr();
+                    if (blockmoved == 1){
+                        lg.mapObjArr[x_val, y_val].SetActive(true);
+                        return pos;
+                    } else {
+                        return tr.position;
+                    }
                 }
+            } 
+            // hit an enemy
+            else if (collision_val == 3){ 
+                Debug.Log("You died...");
             }
-            return pos;
+            // hit the end goal
+            else if (collision_val == 2){ 
+                Debug.Log("You passed the level!");
+            }
+
+            if (eyesopen && lg.mapObjArr[x_val, y_val].activeSelf == false){
+                Debug.Log("Can't explore with your eyes open!");
+                return tr.position;
+            } else {
+                lg.mapObjArr[x_val, y_val].SetActive(true);
+                return pos;
+            }
         } else{
             ShakeCamera(0.5f);
             return tr.position;
@@ -183,5 +221,11 @@ public class PlayerScript : MonoBehaviour
         }
 
         transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
+
+		if(fadeout == true)
+		{
+			ScreenFade(eyesopen);
+			fadeout = false;
+		}
     }
 }

@@ -12,17 +12,20 @@ public class LevelGenerator : MonoBehaviour {
 	public GameObject GroundPrefab;
 
 	public int[,] mapArr;
+	public GameObject[,] mapObjArr;
+	public int goal_x, goal_y;
 
 	public List<GameObject> interactables  = new List<GameObject>();
 
 	// Use this for initialization
 	void Start () {
 		mapArr = new int[map.width,map.height];
-		GenerateLevel();
+		mapObjArr = new GameObject[map.width,map.height];
 
+		GenerateLevel();
 	}
 
-	void PrintMapArr(){
+	public void PrintMapArr(){
 		int rowLength = mapArr.GetLength(0);
 		int colLength = mapArr.GetLength(1);
 		string arrayString = "";
@@ -45,12 +48,17 @@ public class LevelGenerator : MonoBehaviour {
 			for (int y = 0; y < map.height; y++)
 			{
 				GenerateTile(x, y);
+
+				Vector2 position = new Vector2(x, y);
+				mapObjArr[x,y] = Instantiate(GroundPrefab, position, Quaternion.identity, transform);
 			}
 		}
 
 		PrintMapArr();
 
 		GenerateWalls();
+
+		TurnGroundOff();
 	}
 
 	void GenerateWalls(){
@@ -64,42 +72,60 @@ public class LevelGenerator : MonoBehaviour {
 					// add wall to the top if no other tile above
 					if (j != (colLength - 1) && mapArr[i, (j+1)] == 0){
 						Vector2 position = new Vector2(i, (j+1));
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 90)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 90)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					} if (j == (colLength - 1)){
 						Vector2 position = new Vector2(i, (j+1));
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 90)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 90)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					}
 
 					// add wall to the right if no other tile to the right
 					if (i != (rowLength - 1) && mapArr[(i+1), j] == 0){
 						Vector2 position = new Vector2((i+1), j);
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 0)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 0)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					} else if (i == (rowLength - 1)) {
 						Vector2 position = new Vector2((i+1), j);
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 0)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 0)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					}
 
 					// add wall to the bottom if no other tile below
 					if (j != 0 && mapArr[i, (j-1)] == 0){
 						Vector2 position = new Vector2(i, (j-1));
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 270)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 270)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					} else if (j == 0){
 						Vector2 position = new Vector2(i, (j-1));
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 270)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 270)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					}
 
 					// add wall to the left if no other tile to the left
 					if (i != 0 && mapArr[(i-1), j] == 0){
 						Vector2 position = new Vector2((i-1), j);
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 180)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 180)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					}else if (i == 0){
 						Vector2 position = new Vector2((i-1), j);
-						Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 180)), transform);
+						GameObject newWall = Instantiate(WallPrefab, position, Quaternion.Euler(new Vector3(0, 0, 180)), transform);
+						mapObjArr[i,j].GetComponent<Ground>().walls.Add(newWall);
 					}
 				}
 			}
 		}
 
+	}
+
+	void TurnGroundOff(){
+        foreach (GameObject curr_ground in mapObjArr)
+        {
+            curr_ground.SetActive(false);
+        }
+
+		mapObjArr[0,0].SetActive(true);
+		mapObjArr[goal_x,goal_y].SetActive(true);
 	}
 
 	void GenerateTile (int x, int y)
@@ -128,7 +154,10 @@ public class LevelGenerator : MonoBehaviour {
 					Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
 					// interactables.Add( newInteractable );
 				} else if (colorMapping.prefabID.Equals("Goal")){
+					Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
 					mapArr[x,y] = 2;
+					goal_x = x;
+					goal_y = y;
 				} else if (colorMapping.prefabID.Equals("Block")){
 					mapArr[x,y] = 5 + interactCount;
 					GameObject newInteractable = Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
@@ -136,7 +165,6 @@ public class LevelGenerator : MonoBehaviour {
 					interactCount += 1;
 				}
 
-				Instantiate(GroundPrefab, position, Quaternion.identity, transform);
 			}
 		}
 	}
