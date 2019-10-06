@@ -531,6 +531,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3852356607878937612, guid: 7d7c558fa0174334e83f6fddf9a9d05f,
+        type: 3}
+      propertyPath: m_Name
+      value: bgMasterParent
+      objectReference: {fileID: 0}
     - target: {fileID: 6096717808996089810, guid: 7d7c558fa0174334e83f6fddf9a9d05f,
         type: 3}
       propertyPath: cam
@@ -546,11 +551,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1624693836035704776}
-    - target: {fileID: 3852356607878937612, guid: 7d7c558fa0174334e83f6fddf9a9d05f,
-        type: 3}
-      propertyPath: m_Name
-      value: bgMasterParent
-      objectReference: {fileID: 0}
     - target: {fileID: 4225043107160593338, guid: 7d7c558fa0174334e83f6fddf9a9d05f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -960,6 +960,36 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 7186990707559556898, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_text
+      value: '1: Adventure'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186990707559556898, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186990707559556898, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186990707559556898, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186990707559556898, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186990707559556898, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59f23ea4ecda37b4fa1549bcc7401f48, type: 3}
 --- !u!1001 &4308642155473133674
@@ -994,6 +1024,11 @@ PrefabInstance:
       propertyPath: bgParent3
       value: 
       objectReference: {fileID: 1193990982}
+    - target: {fileID: 4308642155180748142, guid: eec203af4c4d36c4c9adf2a000997684,
+        type: 3}
+      propertyPath: map
+      value: 
+      objectReference: {fileID: 2800000, guid: 00b4f23d608f29c41a63bec03306a2bc, type: 3}
     - target: {fileID: 4308642155180748143, guid: eec203af4c4d36c4c9adf2a000997684,
         type: 3}
       propertyPath: m_LocalPosition.x

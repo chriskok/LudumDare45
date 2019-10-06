@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7398819384451761096}
   - component: {fileID: 8957849647240759646}
+  - component: {fileID: 7037756732288842464}
   m_Layer: 0
   m_Name: Enemy_0
   m_TagString: Untagged
@@ -81,6 +82,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7037756732288842464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6748011183023357426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0a24b614687a64eab5ff8565abdaac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySprites:
+  - {fileID: 8596640243658272642, guid: dd700bee3ace7424f9e7d4966739b735, type: 3}
+  - {fileID: -7642239419928554605, guid: dd700bee3ace7424f9e7d4966739b735, type: 3}
+  - {fileID: -3876759189950653258, guid: dd700bee3ace7424f9e7d4966739b735, type: 3}
 --- !u!1 &8130291628478942779
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,7 +107,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2457999971806090679}
-  - component: {fileID: 3357264368263470400}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -113,15 +129,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3357264368263470400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8130291628478942779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cdecbe98a2a5f446aea7876cfaddba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

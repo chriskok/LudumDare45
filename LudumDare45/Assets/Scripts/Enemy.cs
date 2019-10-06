@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public Sprite[] enemySprites;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameObject.GetComponent<SpriteRenderer>().sprite = enemySprites[UnityEngine.Random.Range(0, enemySprites.Length)];
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
