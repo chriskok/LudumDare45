@@ -14,8 +14,13 @@ public class LevelGenerator : MonoBehaviour {
 	public int[,] mapArr;
 	public GameObject[,] mapObjArr;
 	public int goal_x, goal_y;
+	public int blockThreshold = 20;
+
+	int interactCount = 0;
+	int enemyCount = 0;
 
 	public List<GameObject> interactables  = new List<GameObject>();
+	public List<GameObject> enemies  = new List<GameObject>();
 
     [Header("BG Variables")]
 	public GameObject bgObj;
@@ -175,7 +180,6 @@ public class LevelGenerator : MonoBehaviour {
 			return;
 		}
 
-		int interactCount = 0;
 		foreach (ColorToPrefab colorMapping in colorMappings)
 		{
 			if (colorMapping.color.Equals(pixelColor))
@@ -186,16 +190,17 @@ public class LevelGenerator : MonoBehaviour {
 				if(colorMapping.prefabID.Equals("Ground")){
 
 				} else if (colorMapping.prefabID.Equals("Enemy")){
-					mapArr[x,y] = 3;
-					Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
-					// interactables.Add( newInteractable );
+					mapArr[x,y] = 3 + enemyCount;
+					GameObject newEnemy = Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
+					enemies.Add( newEnemy );
+					enemyCount += 1;
 				} else if (colorMapping.prefabID.Equals("Goal")){
 					Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
 					mapArr[x,y] = 2;
 					goal_x = x;
 					goal_y = y;
 				} else if (colorMapping.prefabID.Equals("Block")){
-					mapArr[x,y] = 5 + interactCount;
+					mapArr[x,y] = blockThreshold + interactCount;
 					GameObject newInteractable = Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
 					interactables.Add( newInteractable );
 					interactCount += 1;

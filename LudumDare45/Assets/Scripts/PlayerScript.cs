@@ -23,6 +23,8 @@ public class PlayerScript : MonoBehaviour
     private Vector3 pos;
     private Transform tr;
     public LevelGenerator lg;
+    public int blockThreshold = 20;
+    public int enemyThreshold = 3;
 
     [Header("Effects Variables")]
     public CameraShake camshake;
@@ -109,7 +111,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     // Directions up down left right are represented by (1,2,3,4) respectively
-    int MoveBlock(GameObject block, Vector3 pos, int direction){
+    int MoveBlock(GameObject block, Vector3 pos, int direction, int collision_val){
 		int rowLength = lg.mapArr.GetLength(0);
 		int colLength = lg.mapArr.GetLength(1);
         int x_val = Mathf.RoundToInt(pos.x);
@@ -119,9 +121,15 @@ public class PlayerScript : MonoBehaviour
         Vector3 blockpos = block.transform.position;
         
         if (direction == 1){
-            if (y_val + 1 >= colLength || lg.mapArr[x_val, y_val + 1] > 2 || lg.mapArr[x_val, y_val + 1] < 1){
+            if (y_val + 1 >= colLength){ return 0; }
+            int new_col_val = lg.mapArr[x_val, y_val + 1];
+            if (y_val + 1 >= colLength || new_col_val < 1 || new_col_val >= blockThreshold){
                 return 0;
             } else {
+                if (new_col_val >= enemyThreshold && new_col_val < blockThreshold){
+                    // Enemy detected - remove enemy
+                    lg.enemies[new_col_val - enemyThreshold].SetActive(false);
+                } 
                 Block blockscript = block.GetComponent<Block>();
                 blockscript.MoveMe(new Vector3(x_val, y_val + 1, 0), speed);
                 lg.mapArr[x_val,y_val + 1] = lg.mapArr[x_val,y_val];
@@ -129,9 +137,15 @@ public class PlayerScript : MonoBehaviour
                 return 1;
             }
         } else if (direction == 3){
-            if (y_val - 1 < 0 || lg.mapArr[x_val, y_val - 1] > 2 || lg.mapArr[x_val, y_val- 1] < 1){
+            if (y_val - 1 < 0){ return 0; }
+            int new_col_val = lg.mapArr[x_val, y_val- 1];
+            if (y_val - 1 < 0 || new_col_val < 1 || new_col_val >= blockThreshold){
                 return 0;
             } else {
+                if (new_col_val >= enemyThreshold && new_col_val < blockThreshold){
+                    // Enemy detected - remove enemy
+                    lg.enemies[new_col_val - enemyThreshold].SetActive(false);
+                } 
                 Block blockscript = block.GetComponent<Block>();
                 blockscript.MoveMe(new Vector3(x_val, y_val - 1, 0), speed);
                 lg.mapArr[x_val,y_val - 1] = lg.mapArr[x_val,y_val];
@@ -139,9 +153,15 @@ public class PlayerScript : MonoBehaviour
                 return 1;
             }
         } else if (direction == 2){
-            if (x_val + 1 >= rowLength || lg.mapArr[x_val+ 1, y_val] > 2 || lg.mapArr[x_val+ 1, y_val] < 1){
+            if (x_val + 1 >= rowLength){ return 0; }
+            int new_col_val = lg.mapArr[x_val+ 1, y_val];
+            if (x_val + 1 >= rowLength || new_col_val < 1 || new_col_val >= blockThreshold){
                 return 0;
             } else {
+                if (new_col_val >= enemyThreshold && new_col_val < blockThreshold){
+                    // Enemy detected - remove enemy
+                    lg.enemies[new_col_val - enemyThreshold].SetActive(false);
+                } 
                 Block blockscript = block.GetComponent<Block>();
                 blockscript.MoveMe(new Vector3(x_val + 1, y_val, 0), speed);
                 lg.mapArr[x_val + 1,y_val] = lg.mapArr[x_val,y_val];
@@ -149,9 +169,15 @@ public class PlayerScript : MonoBehaviour
                 return 1;
             }
         } else if (direction == 4){
-            if (x_val - 1 < 0 || lg.mapArr[x_val - 1, y_val] > 2 || lg.mapArr[x_val- 1, y_val] < 1){
+            if (x_val - 1 < 0){ return 0; }
+            int new_col_val = lg.mapArr[x_val- 1, y_val];
+            if (x_val - 1 < 0 || new_col_val < 1 || new_col_val >= blockThreshold){
                 return 0;
             } else {
+                if (new_col_val >= enemyThreshold && new_col_val < blockThreshold){
+                    // Enemy detected - remove enemy
+                    lg.enemies[new_col_val - enemyThreshold].SetActive(false);
+                } 
                 Block blockscript = block.GetComponent<Block>();
                 blockscript.MoveMe(new Vector3(x_val - 1, y_val, 0), speed);
                 lg.mapArr[x_val - 1,y_val] = lg.mapArr[x_val,y_val];
@@ -196,13 +222,16 @@ public class PlayerScript : MonoBehaviour
                     return tr.position;
             }
 
-            if (collision_val >= 5){
-                int blockmoved = MoveBlock(lg.interactables[collision_val - 5], pos, direction);
+            if (collision_val >= blockThreshold){
+                int blockmoved = MoveBlock(lg.interactables[collision_val - blockThreshold], pos, direction, collision_val);
                 // lg.PrintMapArr();
                 if (blockmoved == 1){
                     lg.mapObjArr[x_val, y_val].SetActive(true);
                     audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],0.5f);
                     audiosource.PlayOneShot(hitBox, 0.5f);
+                    if (x_val == lg.goal_x && y_val == lg.goal_y){
+                        StartCoroutine(playSoundAndLoadLevel(1, SceneManager.GetActiveScene().buildIndex + 1));
+                    }
                     return pos;
                 } else {
                     audiosource.PlayOneShot(hitWall, 0.5f);
@@ -210,11 +239,11 @@ public class PlayerScript : MonoBehaviour
                 }
             } 
             // hit an enemy
-            else if (collision_val == 3){ 
+            else if (collision_val >= 3){ 
                 StartCoroutine(playSoundAndLoadLevel(2, SceneManager.GetActiveScene().buildIndex));
             }
-            // hit the end goal
-            else if (collision_val == 2){ 
+            
+            if (x_val == lg.goal_x && y_val == lg.goal_y){
                 StartCoroutine(playSoundAndLoadLevel(1, SceneManager.GetActiveScene().buildIndex + 1));
             }
 
