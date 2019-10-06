@@ -17,6 +17,17 @@ public class LevelGenerator : MonoBehaviour {
 
 	public List<GameObject> interactables  = new List<GameObject>();
 
+    [Header("BG Variables")]
+	public GameObject bgObj;
+	public GameObject bgParent1;
+	public GameObject bgParent2;
+	public GameObject bgParent3;
+	public float maxPos = 10.0f;
+	public float minPos = -10.0f;
+	public float scaleMin = 0.3f;
+	public float scaleMax = 2f;
+	public int max = 100;
+
 	// Use this for initialization
 	void Start () {
 		mapArr = new int[map.width,map.height];
@@ -43,7 +54,27 @@ public class LevelGenerator : MonoBehaviour {
 	}
 
 	public void GenerateBG(){
-		
+        for (int i = 0; i < max; i++) {
+			Vector3 position = new Vector3 (UnityEngine.Random.Range(minPos,maxPos),UnityEngine.Random.Range(minPos,maxPos),0);
+			GameObject newbg = Instantiate(bgObj, position, Quaternion.Euler(new Vector3(0, 0, Random.Range(0,360))));
+			newbg.transform.parent = bgParent1.transform;
+			float randomScale = UnityEngine.Random.Range(scaleMin,scaleMax);
+        	newbg.transform.localScale = new Vector3(randomScale, randomScale, 1);
+        }
+        for (int i = 0; i < max; i++) {
+			Vector3 position = new Vector3 (UnityEngine.Random.Range(minPos,maxPos),UnityEngine.Random.Range(minPos,maxPos),0);
+			GameObject newbg = Instantiate(bgObj, position, Quaternion.Euler(new Vector3(0, 0, Random.Range(0,360))));
+			newbg.transform.parent = bgParent2.transform;
+			float randomScale = UnityEngine.Random.Range(scaleMin,scaleMax);
+        	newbg.transform.localScale = new Vector3(randomScale, randomScale, 1);
+        }
+        for (int i = 0; i < max; i++) {
+			Vector3 position = new Vector3 (UnityEngine.Random.Range(minPos,maxPos),UnityEngine.Random.Range(minPos,maxPos),0);
+			GameObject newbg = Instantiate(bgObj, position, Quaternion.Euler(new Vector3(0, 0, Random.Range(0,360))));
+			newbg.transform.parent = bgParent3.transform;
+			float randomScale = UnityEngine.Random.Range(scaleMin,scaleMax);
+        	newbg.transform.localScale = new Vector3(randomScale, randomScale, 1);
+        }
 	}
 
 	void GenerateLevel ()

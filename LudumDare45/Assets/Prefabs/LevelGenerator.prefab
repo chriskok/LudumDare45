@@ -66,3 +66,12 @@ MonoBehaviour:
   goal_x: 0
   goal_y: 0
   interactables: []
+  bgObj: {fileID: 6921548133244438284, guid: 3e7e53069bfdfd141a77e76a3c104966, type: 3}
+  bgParent1: {fileID: 0}
+  bgParent2: {fileID: 0}
+  bgParent3: {fileID: 0}
+  maxPos: 10
+  minPos: -5
+  scaleMin: 0.6
+  scaleMax: 1.6
+  max: 20
