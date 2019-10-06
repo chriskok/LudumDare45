@@ -24,6 +24,8 @@ public class PlayerScript : MonoBehaviour
     public LevelGenerator lg;
     public CameraShake camshake;
     public GameObject fadechange;
+    public Animator openingui;
+    private bool levelstart;
 
     // Start is called before the first frame update
     void Start()
@@ -34,9 +36,8 @@ public class PlayerScript : MonoBehaviour
 		port = 5065; 
 		fadeout = false; 
         eyesopen = true;
+        levelstart = false;
 		InitUDP();
-
-
     }
 
 	private void InitUDP()
@@ -203,29 +204,38 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D) && tr.position == pos) {
-            pos += Vector3.right;
-            pos = CheckCollision(pos, 2);        
-        }
-        else if (Input.GetKeyDown(KeyCode.A) && tr.position == pos) {
-            pos += Vector3.left;
-            pos = CheckCollision(pos, 4);        
-        }
-        else if (Input.GetKeyDown(KeyCode.W) && tr.position == pos) {
-            pos += Vector3.up;
-            pos = CheckCollision(pos, 1);        
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && tr.position == pos) {
-            pos += Vector3.down;
-            pos = CheckCollision(pos, 3);        
+        if (Input.GetKeyDown("space") && levelstart == false){
+            fadechange.GetComponent<Animator>().SetTrigger("FadeIn"); 
+            openingui.SetTrigger("Fade"); 
+            levelstart=true;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
+        if (levelstart){
+            if (Input.GetKeyDown(KeyCode.D) && tr.position == pos) {
+                pos += Vector3.right;
+                pos = CheckCollision(pos, 2);        
+            }
+            else if (Input.GetKeyDown(KeyCode.A) && tr.position == pos) {
+                pos += Vector3.left;
+                pos = CheckCollision(pos, 4);        
+            }
+            else if (Input.GetKeyDown(KeyCode.W) && tr.position == pos) {
+                pos += Vector3.up;
+                pos = CheckCollision(pos, 1);        
+            }
+            else if (Input.GetKeyDown(KeyCode.S) && tr.position == pos) {
+                pos += Vector3.down;
+                pos = CheckCollision(pos, 3);        
+            }
 
-		if(fadeout == true)
-		{
-			ScreenFade(eyesopen);
-			fadeout = false;
-		}
+            transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
+
+            if(fadeout == true)
+            {
+                ScreenFade(eyesopen);
+                fadeout = false;
+            }
+
+        }
     }
 }
