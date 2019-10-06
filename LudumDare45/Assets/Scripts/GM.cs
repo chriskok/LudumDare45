@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GM : MonoBehaviour
 {
@@ -85,10 +86,16 @@ public class GM : MonoBehaviour
         InitUDP();
     }
 
+    public void ResetLevel(){
+        PlayerScript currentPlayerScript = currentPlayer.GetComponent<PlayerScript>();
+
+        StartCoroutine(currentPlayerScript.playSoundAndLoadLevel(3, SceneManager.GetActiveScene().buildIndex));
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (currentPlayer == null){
+        if (!SceneManager.GetActiveScene().name.Equals("End") && currentPlayer == null){
             currentPlayer = GameObject.Find("Player").GetComponent<PlayerScript>();
         }
     }

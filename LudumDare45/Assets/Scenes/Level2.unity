@@ -798,6 +798,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1624693836035704774}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1624693836035704777 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1624693837420937416, guid: be96046f58da9174b9290e7b1c935b79,
+    type: 3}
+  m_PrefabInstance: {fileID: 1624693836035704774}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68578787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a5a95dae642ab48be17c61d69a9e8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1874057339801970809
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -805,6 +817,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_text
+      value: Sometimes, there are obstacles. Like vegetables.
+      objectReference: {fileID: 0}
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6053836136563004059, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7186990707030129315, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
         type: 3}
       propertyPath: m_Name
@@ -984,6 +1031,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.lineCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7711067272188390356, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1624693836035704777}
+    - target: {fileID: 7711067272188390356, guid: 59f23ea4ecda37b4fa1549bcc7401f48,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResetLevel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59f23ea4ecda37b4fa1549bcc7401f48, type: 3}

@@ -25,6 +25,7 @@ public class PlayerScript : MonoBehaviour
     public LevelGenerator lg;
     public int blockThreshold = 20;
     public int enemyThreshold = 3;
+    public bool GameOverride = false;
 
     [Header("Effects Variables")]
     public CameraShake camshake;
@@ -189,13 +190,14 @@ public class PlayerScript : MonoBehaviour
         return 0;
     }
 
-    IEnumerator playSoundAndLoadLevel(int soundIndex, int levelIndex){
+    public IEnumerator playSoundAndLoadLevel(int soundIndex, int levelIndex){
         if (soundIndex == 1){
-            audiosource.PlayOneShot(hitGoal, 0.5f);
+            audiosource.PlayOneShot(hitGoal, 1f);
         } else if (soundIndex == 2){
-            audiosource.PlayOneShot(hitEnemy, 0.5f);
+            audiosource.PlayOneShot(hitEnemy, 1f);
         }
         fadechange.GetComponent<Animator>().SetBool("Darkness", true); 
+        currentUI.SetTrigger("FadeOut"); 
         yield return new WaitWhile (()=> audiosource.isPlaying);
         SceneManager.LoadScene(levelIndex);
     }
@@ -209,7 +211,7 @@ public class PlayerScript : MonoBehaviour
         int y_val = Mathf.RoundToInt(pos.y);
 
         if (x_val < 0 || y_val < 0 || x_val >= rowLength || y_val >= colLength){
-            audiosource.PlayOneShot(hitWall, 0.5f);
+            audiosource.PlayOneShot(hitWall, 1f);
             ShakeCamera(0.5f);
             return tr.position;
         }
@@ -227,14 +229,14 @@ public class PlayerScript : MonoBehaviour
                 // lg.PrintMapArr();
                 if (blockmoved == 1){
                     lg.mapObjArr[x_val, y_val].SetActive(true);
-                    audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],0.5f);
-                    audiosource.PlayOneShot(hitBox, 0.5f);
+                    audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],1f);
+                    audiosource.PlayOneShot(hitBox, 1f);
                     if (x_val == lg.goal_x && y_val == lg.goal_y){
                         StartCoroutine(playSoundAndLoadLevel(1, SceneManager.GetActiveScene().buildIndex + 1));
                     }
                     return pos;
                 } else {
-                    audiosource.PlayOneShot(hitWall, 0.5f);
+                    audiosource.PlayOneShot(hitWall, 1f);
                     return tr.position;
                 }
             } 
@@ -248,13 +250,17 @@ public class PlayerScript : MonoBehaviour
             }
 
             lg.mapObjArr[x_val, y_val].SetActive(true);
-            audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],0.5f);
+            audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],1f);
             return pos;
         } else{
-            audiosource.PlayOneShot(hitWall, 0.5f); 
+            audiosource.PlayOneShot(hitWall, 1f); 
             ShakeCamera(0.5f);
             return tr.position;
         }
+    }
+
+    public void ResetLevel(){
+        StartCoroutine(playSoundAndLoadLevel(3, SceneManager.GetActiveScene().buildIndex));
     }
 
 
@@ -269,7 +275,11 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z)){
             eyesopen = !eyesopen;
-            Debug.Log("eyes open: " + eyesopen);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)){
+            eyesopen = !eyesopen;
+            fadeout = true;
         }
 
         if (levelstart){
