@@ -163,6 +163,17 @@ public class PlayerScript : MonoBehaviour
         return 0;
     }
 
+    IEnumerator playSoundAndLoadLevel(int soundIndex, int levelIndex){
+        if (soundIndex == 1){
+            audiosource.PlayOneShot(hitGoal, 0.5f);
+        } else if (soundIndex == 2){
+            audiosource.PlayOneShot(hitEnemy, 0.5f);
+        }
+        fadechange.GetComponent<Animator>().SetBool("Darkness", true); 
+        yield return new WaitWhile (()=> audiosource.isPlaying);
+        SceneManager.LoadScene(levelIndex);
+    }
+
     // called when the cube hits the floor
     Vector3 CheckCollision(Vector3 pos, int direction)
     {
@@ -181,7 +192,7 @@ public class PlayerScript : MonoBehaviour
         if (collision_val >= 1){
             // hit a block
             if (eyesopen && lg.mapObjArr[x_val, y_val].activeSelf == false){
-                    Debug.Log("Can't move explore with your eyes open!");
+                    Debug.Log("Can't explore with your eyes open!");
                     return tr.position;
             }
 
@@ -200,15 +211,11 @@ public class PlayerScript : MonoBehaviour
             } 
             // hit an enemy
             else if (collision_val == 3){ 
-                audiosource.PlayOneShot(hitEnemy, 0.5f);
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                Debug.Log("You died...");
+                StartCoroutine(playSoundAndLoadLevel(2, SceneManager.GetActiveScene().buildIndex));
             }
             // hit the end goal
             else if (collision_val == 2){ 
-                audiosource.PlayOneShot(hitGoal, 0.5f);
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);                
-                Debug.Log("You passed the level!");
+                StartCoroutine(playSoundAndLoadLevel(1, SceneManager.GetActiveScene().buildIndex + 1));
             }
 
             lg.mapObjArr[x_val, y_val].SetActive(true);

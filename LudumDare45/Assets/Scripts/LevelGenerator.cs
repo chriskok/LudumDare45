@@ -23,6 +23,7 @@ public class LevelGenerator : MonoBehaviour {
 		mapObjArr = new GameObject[map.width,map.height];
 
 		GenerateLevel();
+		GenerateBG();
 	}
 
 	public void PrintMapArr(){
@@ -39,6 +40,10 @@ public class LevelGenerator : MonoBehaviour {
 		}
 
 		Debug.Log(arrayString);
+	}
+
+	public void GenerateBG(){
+		
 	}
 
 	void GenerateLevel ()
