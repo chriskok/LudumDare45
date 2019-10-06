@@ -32,10 +32,10 @@ GIF PREVIEW:
 
 - Research links down below on how people live with blindness, it was really eye opening (no pun intended). Specifically like to point out this research paper: https://pdfs.semanticscholar.org/6e90/115ff4c6696dd691b8e3f9a51735bc925cd8.pdf. They point out how people with blindness navigate new spaces which gave me the idea of exploring and revealing squares incrementally.
 
-![Eyes Closed](Marketing/1.jpg)
+![Eyes Closed](Marketing/1.JPG)
 - Close your eyes to explore the world around you
 
-![Eyes Open](Marketing/2.jpg)
+![Eyes Open](Marketing/2.JPG)
 - Open them to see what you've explored and move about freely
 
 
