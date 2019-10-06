@@ -6,26 +6,42 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
 
-	// Networking variables
+    [Header("Networking Variables")]
 	Thread receiveThread; 
 	UdpClient client; 
-	bool fadeout;
-    bool eyesopen;
+	public bool fadeout;
+    public bool eyesopen;
 	int port; 
 
+    [Header("Movement Variables")]
     public float speed = 2.0f;
     private Vector3 pos;
     private Transform tr;
-
     public LevelGenerator lg;
+
+    [Header("Effects Variables")]
     public CameraShake camshake;
     public GameObject fadechange;
-    public Animator openingui;
+    public Animator currentUI;
     private bool levelstart;
+    
+    [Header("Audio Variables")]
+    public AudioClip closeEyes;
+    public AudioClip hitWall;
+    public AudioClip hitBox;
+    public AudioClip hitEnemy;
+    public AudioClip hitGoal;
+    public AudioClip[] walkClips;
+    private AudioSource audiosource;
+
+    void Awake () {
+        audiosource = GetComponent<AudioSource>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +53,7 @@ public class PlayerScript : MonoBehaviour
 		fadeout = false; 
         eyesopen = true;
         levelstart = false;
-		InitUDP();
+		// InitUDP();
     }
 
 	private void InitUDP()
@@ -156,6 +172,7 @@ public class PlayerScript : MonoBehaviour
         int y_val = Mathf.RoundToInt(pos.y);
 
         if (x_val < 0 || y_val < 0 || x_val >= rowLength || y_val >= colLength){
+            audiosource.PlayOneShot(hitWall, 0.5f);
             ShakeCamera(0.5f);
             return tr.position;
         }
@@ -163,38 +180,42 @@ public class PlayerScript : MonoBehaviour
         int collision_val = lg.mapArr[x_val,y_val];
         if (collision_val >= 1){
             // hit a block
-            if (collision_val >= 5){
-                if (eyesopen && lg.mapObjArr[x_val, y_val].activeSelf == false){
+            if (eyesopen && lg.mapObjArr[x_val, y_val].activeSelf == false){
                     Debug.Log("Can't move explore with your eyes open!");
                     return tr.position;
+            }
+
+            if (collision_val >= 5){
+                int blockmoved = MoveBlock(lg.interactables[collision_val - 5], pos, direction);
+                // lg.PrintMapArr();
+                if (blockmoved == 1){
+                    lg.mapObjArr[x_val, y_val].SetActive(true);
+                    audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],0.5f);
+                    audiosource.PlayOneShot(hitBox, 0.5f);
+                    return pos;
                 } else {
-                    int blockmoved = MoveBlock(lg.interactables[collision_val - 5], pos, direction);
-                    // lg.PrintMapArr();
-                    if (blockmoved == 1){
-                        lg.mapObjArr[x_val, y_val].SetActive(true);
-                        return pos;
-                    } else {
-                        return tr.position;
-                    }
+                    audiosource.PlayOneShot(hitWall, 0.5f);
+                    return tr.position;
                 }
             } 
             // hit an enemy
             else if (collision_val == 3){ 
+                audiosource.PlayOneShot(hitEnemy, 0.5f);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 Debug.Log("You died...");
             }
             // hit the end goal
             else if (collision_val == 2){ 
+                audiosource.PlayOneShot(hitGoal, 0.5f);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);                
                 Debug.Log("You passed the level!");
             }
 
-            if (eyesopen && lg.mapObjArr[x_val, y_val].activeSelf == false){
-                Debug.Log("Can't explore with your eyes open!");
-                return tr.position;
-            } else {
-                lg.mapObjArr[x_val, y_val].SetActive(true);
-                return pos;
-            }
+            lg.mapObjArr[x_val, y_val].SetActive(true);
+            audiosource.PlayOneShot(walkClips[UnityEngine.Random.Range(0, walkClips.Length)],0.5f);
+            return pos;
         } else{
+            audiosource.PlayOneShot(hitWall, 0.5f); 
             ShakeCamera(0.5f);
             return tr.position;
         }
@@ -206,26 +227,31 @@ public class PlayerScript : MonoBehaviour
     {
         if (Input.GetKeyDown("space") && levelstart == false){
             fadechange.GetComponent<Animator>().SetTrigger("FadeIn"); 
-            openingui.SetTrigger("Fade"); 
+            currentUI.SetTrigger("Fade"); 
             levelstart=true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z)){
+            eyesopen = !eyesopen;
+            Debug.Log("eyes open: " + eyesopen);
         }
 
         if (levelstart){
             if (Input.GetKeyDown(KeyCode.D) && tr.position == pos) {
                 pos += Vector3.right;
-                pos = CheckCollision(pos, 2);        
+                pos = CheckCollision(pos, 2);
             }
             else if (Input.GetKeyDown(KeyCode.A) && tr.position == pos) {
                 pos += Vector3.left;
-                pos = CheckCollision(pos, 4);        
+                pos = CheckCollision(pos, 4);
             }
             else if (Input.GetKeyDown(KeyCode.W) && tr.position == pos) {
                 pos += Vector3.up;
-                pos = CheckCollision(pos, 1);        
+                pos = CheckCollision(pos, 1);
             }
             else if (Input.GetKeyDown(KeyCode.S) && tr.position == pos) {
                 pos += Vector3.down;
-                pos = CheckCollision(pos, 3);        
+                pos = CheckCollision(pos, 3);
             }
 
             transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);

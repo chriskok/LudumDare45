@@ -125,4 +125,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a5a95dae642ab48be17c61d69a9e8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeout: 0
+  eyesopen: 0
   speed: 0.5
+  lg: {fileID: 0}
+  camshake: {fileID: 0}
+  fadechange: {fileID: 0}
+  currentUI: {fileID: 0}
+  closeEyes: {fileID: 8300000, guid: bb2f9d0cb82e7c0478325749d24e8d2f, type: 3}
+  hitWall: {fileID: 8300000, guid: 7fe502e0850054a428fb5838d7383471, type: 3}
+  hitBox: {fileID: 8300000, guid: de922de708e1b1447813df3fb6a2845b, type: 3}
+  hitEnemy: {fileID: 8300000, guid: afd3fa88520fde148a6b421b7cdf7375, type: 3}
+  hitGoal: {fileID: 8300000, guid: 0be4a4f0403720f4092292c94b11ceb2, type: 3}
+  walkClips:
+  - {fileID: 8300000, guid: b9c2b8d659bfe6640a573eb0bbb9497f, type: 3}
+  - {fileID: 8300000, guid: e5fa3d5655e3ca540972823fd9b24686, type: 3}
