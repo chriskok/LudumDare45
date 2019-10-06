@@ -13,8 +13,6 @@ public class Ground : MonoBehaviour
     }
 
     public void OnEnable(){
-        Debug.Log(transform.position);
-        Debug.Log(walls.Count);
         foreach (GameObject wall in walls)
         {
             wall.SetActive(true);
